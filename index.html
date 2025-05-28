@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AHMEDVPNS</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #00bfff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-weight: normal;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    input[type="password"] {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #2a2a2a;
+      color: #fff;
+      width: 80%;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+
+    input[type="password"]:focus {
+      background: #333;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 25px;
+      background: #00bfff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #009acc;
+      transform: scale(1.05);
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 15px;
+      border-radius: 15px;
+      border: none;
+      resize: none;
+      background: #2a2a2a;
+      color: #fff;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    #main {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="login">
+    <h1>AHMEDVPNS</h1>
+    <h2>Введите пароль для доступа</h2>
+    <input type="password" id="password" placeholder="Пароль">
+    <br>
+    <button type="button" onclick="checkPassword()">Войти</button>
+  </div>
+
+  <div class="container" id="main">
+    <h1>Добро пожаловать!</h1>
+    <h2>VLESS VPN - 1 месяц = 5$</h2>
+    <textarea readonly>vless://0b746c18-c8b1-4aeb-a454-2e6af7ea31de@194.33.34.21:54469/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=google.com&fp=chrome&security=reality&pbk=sVgV6atuZeJJ1oQCz0Xv7zpW7uxbyUJLJVeTNYArMg0&sid=99#AHMEDVPN</textarea>
+    <br>
+    <button type="button" onclick="copyVPN()">Скопировать VPN</button>
+    <footer>© 2025 AHMEDVPNS. Продается VLESS VPN. Связь: @ваш_телеграм</footer>
+  </div>
+
+  <script>
+    function checkPassword() {
+      const password = document.getElementById('password').value;
+      if (password === '1234') {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('main').style.display = 'block';
+      } else {
+        alert('Неверный пароль');
+      }
+    }
+
+    function copyVPN() {
+      const textArea = document.querySelector('textarea');
+      navigator.clipboard.writeText(textArea.value)
+        .then(() => alert('VPN скопирован!'))
+        .catch(() => alert('Ошибка копирования'));
+    }
+  </script>
+</body>
+</html>
