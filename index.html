@@ -1,147 +1,411 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AHMEDVPNS</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed VPN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #121212;
-      color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .container {
-      background: #1e1e1e;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.8s ease forwards;
-    }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    h1 {
-      color: #00bfff;
-      margin-bottom: 10px;
-    }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    h2 {
-      font-weight: normal;
-      color: #ccc;
-      margin-bottom: 20px;
-    }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
 
-    input[type="password"] {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #2a2a2a;
-      color: #fff;
-      width: 80%;
-      font-size: 16px;
-      margin-bottom: 20px;
-      transition: background 0.3s;
-    }
+        .form-group {
+            margin-bottom: 25px;
+        }
 
-    input[type="password"]:focus {
-      background: #333;
-      outline: none;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
 
-    button {
-      padding: 12px 25px;
-      background: #00bfff;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
 
-    button:hover {
-      background: #009acc;
-      transform: scale(1.05);
-    }
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
 
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 15px;
-      border-radius: 15px;
-      border: none;
-      resize: none;
-      background: #2a2a2a;
-      color: #fff;
-      margin-top: 20px;
-      font-size: 14px;
-    }
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
 
-    footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #777;
-    }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
 
-    #main {
-      display: none;
-    }
-  </style>
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .key-display {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #2ecc71;
+        }
+
+        .copy-btn.copied {
+            background: #e74c3c;
+        }
+
+        .info-box {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .user-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .user-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .user-item:hover {
+            background: #f8f9fa;
+        }
+
+        .user-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-item.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container" id="login">
-    <h1>AHMEDVPNS</h1>
-    <h2>Введите пароль для доступа</h2>
-    <input type="password" id="password" placeholder="Пароль">
-    <br>
-    <button type="button" onclick="checkPassword()">Войти</button>
-  </div>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Ahmed VPN</h1>
+            <p>Howpsuz baglanşyk üçin şahsy VLESS açaryňyzy alyň</p>
+        </div>
 
-  <div class="container" id="main">
-    <h1>hos geldiniz!</h1>
-    <h2>VLESS VPN - $</h2>
-    <textarea readonly>vless://d7020563-b48b-4568-a15f-1c911f8a7f63@koudini.ru:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=google.com&fp=chrome&security=reality&pbk=_B1VBik8vNzn6ugkpo1sgeRYqYRCd3ogldUciyfpO1c&sid=bcea5c80262468#Ahmed%20</textarea>
-    <br>
-    <button type="button" onclick="copyVPN()">vpn kopyalamak VPN</button>
-    <footer>© 2025 AHMEDVPNS. VLESS VPN. Связь: @Ahmed_Rec</footer>
-  </div>
+        <div class="form-group">
+            <label for="userSelect">Ulanyjy saýlaň:</label>
+            <div class="user-list" id="userList">
+                <!-- Ulanyjylaryň sanawy dinamiki goşular -->
+            </div>
+        </div>
 
-  <script>
-    function checkPassword() {
-      const password = document.getElementById('password').value;
-      if (password === '1234') {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('main').style.display = 'block';
-      } else {
-        alert('Неверный пароль');
-      }
-    }
+        <div class="form-group">
+            <label for="serverSelect">Serwer saýlaň:</label>
+            <select id="serverSelect">
+                <option value="">Serwer saýlaň...</option>
+                <option value="singapore">🇸🇬 Singapur</option>
+                <option value="germany">🇩🇪 Germaniýa</option>
+                <option value="usa">🇺🇸 Amerika</option>
+                <option value="brazil">🇧🇷 Braziliýa</option>
+            </select>
+        </div>
 
-    function copyVPN() {
-      const textArea = document.querySelector('textarea');
-      navigator.clipboard.writeText(textArea.value)
-        .then(() => alert('VPN скопирован!'))
-        .catch(() => alert('Ошибка копирования'));
-    }
-  </script>
+        <button class="generate-btn" onclick="generateKey()">
+            🚀 VLESS açar al
+        </button>
+
+        <div class="result-container" id="resultContainer">
+            <h3>✅ Siziň VLESS açaryňyz taýýar!</h3>
+            <div class="key-display" id="keyDisplay"></div>
+            <button class="copy-btn" id="copyBtn" onclick="copyKey()">📋 Açary göçür</button>
+            
+            <div class="info-box">
+                <strong>Görkezme:</strong><br>
+                Açary göçüriň we öz VLESS müşderije programmaňyza goşuň (V2rayN, Shadowrocket we ş.m.)
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalKeys">0</div>
+                <div class="stat-label">Berlen açarlar</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="activeUsers">0</div>
+                <div class="stat-label">Işjeň ulanyjylar</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Serwerler</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ulanyjylaryň sanawy
+        const users = [
+            { id: 'user1', name: 'Ahmed', email: 'ahmed@example.com' },
+            { id: 'user2', name: 'Sylap', email: 'sylap@example.com' },
+            { id: 'user3', name: 'Aman aga', email: 'aman@example.com' },
+            { id: 'user4', name: 'Meryem', email: 'meryem@example.com' },
+            { id: 'user5', name: 'Nuseybe', email: 'nuseybe@example.com' },
+            { id: 'user6', name: 'Bayram dayy', email: 'bayram@example.com' },
+            { id: 'user7', name: 'Türkişmyrat', email: 'turkishmyrat@example.com' }
+        ];
+
+        // Реальные VLESS ключи для каждого сервера
+        const vlessKeys = {
+            'singapore': 'vless://828528e9-3340-4ead-931f-ae190688479f@pop3.freshibeth.click:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=lmaauctions.com&fp=chrome&security=reality&pbk=JeMFHPPOEgZ2KNNdTQE4Ohldh8f1f_tTUNIbWBliWRA&sid=6f038ec9294b#%D0%A1%D0%B8%D0%BD%D0%B3%D0%B0%D0%BF%D1%83%D1%80%F0%9F%8C%86',
+            'germany': 'vless://dd8776f8-05d3-49ba-937f-6941018d9cbd@crm.lefturania.org:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.hollywoodreporter.com&fp=chrome&security=reality&pbk=YtOMJsaboCyEerw4TGr6i-Kz4h6H7zTSWR09CWDdm3E&sid=d9da41d2b043#%D0%93%D0%B5%D1%80%D0%BC%D0%B0%D0%BD%D0%B8%D1%8F%20',
+            'usa': 'vless://9b292f58-925a-4f65-888c-1d58781c79ba@my.bogusfateha.click:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.foxsports.com&fp=chrome&security=reality&pbk=z0Lx8TRdcjOQl310ffO6ZqioOrdrQt5bzzy1ip0IiEc&sid=0a5bbb1f48d5#%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%20',
+            'brazil': 'vless://76203da1-ebcd-4ee6-9caa-8659cf63fd07@exchange.illgolu.cyou:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.hollywoodreporter.com&fp=chrome&security=reality&pbk=UT_JhM6opZFVAwqLs9wQ4mXhMAFEPVEUVoYMzJV8lys&sid=689c60c93a85#%D0%91%D1%80%D0%B0%D0%B7%D0%B8%D0%BB%D0%B8%D1%8F%20'
+        };
+
+        let selectedUserId = null;
+        let keyCount = parseInt(localStorage.getItem('keyCount')) || 0;
+        let activeUsers = new Set(JSON.parse(localStorage.getItem('activeUsers') || '[]'));
+
+        // Инициализация
+        function init() {
+            renderUserList();
+            updateStats();
+        }
+
+        // Отображение списка пользователей
+        function renderUserList() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+                userItem.innerHTML = `
+                    <div><strong>${user.name}</strong></div>
+                    <div style="font-size: 0.9em; color: #666;">${user.email}</div>
+                `;
+                userItem.onclick = () => selectUser(user.id, userItem);
+                userList.appendChild(userItem);
+            });
+        }
+
+        // Выбор пользователя
+        function selectUser(userId, element) {
+            // Убираем выделение с предыдущего элемента
+            document.querySelectorAll('.user-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Выделяем текущий элемент
+            element.classList.add('selected');
+            selectedUserId = userId;
+        }
+
+        // VLESS açar döretmek
+        function generateKey() {
+            if (!selectedUserId) {
+                alert('Sanawda ulanyjy saýlaň');
+                return;
+            }
+
+            const serverSelect = document.getElementById('serverSelect');
+            if (!serverSelect.value) {
+                alert('Serwer saýlaň');
+                return;
+            }
+
+            const selectedUser = users.find(u => u.id === selectedUserId);
+            const vlessKey = vlessKeys[serverSelect.value];
+            
+            // Netijäni görkezmek
+            document.getElementById('keyDisplay').textContent = vlessKey;
+            document.getElementById('resultContainer').classList.add('show');
+            
+            // Statistikany täzelemek
+            keyCount++;
+            activeUsers.add(selectedUserId);
+            localStorage.setItem('keyCount', keyCount.toString());
+            localStorage.setItem('activeUsers', JSON.stringify([...activeUsers]));
+            updateStats();
+            
+            // Netijä skrol etmek
+            document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Açary göçürmek
+        function copyKey() {
+            const keyDisplay = document.getElementById('keyDisplay');
+            navigator.clipboard.writeText(keyDisplay.textContent).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Göçürildi!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                // Köne brauzerleri üçin ätiýaçlyk
+                const textArea = document.createElement('textarea');
+                textArea.value = keyDisplay.textContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('Açar göçürildi!');
+            });
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            document.getElementById('totalKeys').textContent = keyCount;
+            document.getElementById('activeUsers').textContent = activeUsers.size;
+        }
+
+        // Инициализация при загрузке страницы
+        init();
+    </script>
 </body>
 </html>
