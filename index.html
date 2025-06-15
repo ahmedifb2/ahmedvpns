@@ -1,411 +1,496 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed VPN</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VPN Сервис - VLESS, ShadowSocks</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            backdrop-filter: blur(10px);
-        }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    img {
+      max-width: 100%;
+    }
 
-        .header h1 {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
 
-        .header p {
-            color: #7f8c8d;
-            font-size: 1.1em;
-        }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #34495e;
-            font-weight: 600;
-            font-size: 1.1em;
-        }
+    nav ul li a {
+      color: #f1f5f9;
+      transition: color 0.3s ease;
+    }
 
-        select, input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-        }
+    nav ul li a:hover {
+      color: #38bdf8;
+    }
 
-        select:focus, input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+    .menu-toggle {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #f1f5f9;
+    }
 
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-        }
+    @media (max-width: 768px) {
+      nav ul {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        flex-direction: column;
+        width: 100%;
+        background: #1e293b;
+        padding: 1rem;
+        transition: left 0.3s ease;
+      }
 
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
+      nav ul.active {
+        left: 0;
+      }
 
-        .generate-btn:active {
-            transform: translateY(0);
-        }
+      .menu-toggle {
+        display: block;
+      }
+    }
 
-        .result-container {
-            display: none;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #667eea;
-        }
+    /* Hero Section */
+    .hero {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    }
 
-        .result-container.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #38bdf8;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: #cbd5e1;
+    }
 
-        .key-display {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            word-break: break-all;
-            margin: 15px 0;
-            position: relative;
-        }
+    .btn {
+      display: inline-block;
+      background: #38bdf8;
+      color: #0f172a;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
 
-        .copy-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-        }
+    .btn:hover {
+      background: #0ea5e9;
+    }
 
-        .copy-btn:hover {
-            background: #2ecc71;
-        }
+    /* Features */
+    .features {
+      padding: 4rem 2rem;
+      background: #1e293b;
+    }
 
-        .copy-btn.copied {
-            background: #e74c3c;
-        }
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #f1f5f9;
+    }
 
-        .info-box {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-        }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
+    .feature-card {
+      background: #0f172a;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
 
-        .stat-item {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
 
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-        }
+    .feature-icon {
+      font-size: 2rem;
+      color: #38bdf8;
+      margin-bottom: 1rem;
+    }
 
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
+    .feature-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #38bdf8;
+    }
 
-        .user-list {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            background: white;
-        }
+    .feature-desc {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
 
-        .user-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
+    /* VPN Section */
+    .vpn-section {
+      padding: 4rem 2rem;
+      background: #0f172a;
+    }
 
-        .user-item:hover {
-            background: #f8f9fa;
-        }
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
 
-        .user-item:last-child {
-            border-bottom: none;
-        }
+    .tab-nav button {
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
-        .user-item.selected {
-            background: #667eea;
-            color: white;
-        }
+    .tab-nav button.active {
+      background: #38bdf8;
+      color: #0f172a;
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    .tab-content {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      word-break: break-all;
+      transition: background 0.3s ease;
+    }
+
+    .link-item:hover {
+      background: #1e293b;
+    }
+
+    .copy-btn {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: #0ea5e9;
+    }
+
+    /* Footer */
+    footer {
+      background: #0f172a;
+      padding: 2rem;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    /* Scroll to Top Button */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+      z-index: 999;
+      transition: opacity 0.3s ease;
+    }
+
+    #scrollTopBtn.show {
+      display: block;
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔐 Ahmed VPN</h1>
-            <p>Howpsuz baglanşyk üçin şahsy VLESS açaryňyzy alyň</p>
-        </div>
 
-        <div class="form-group">
-            <label for="userSelect">Ulanyjy saýlaň:</label>
-            <div class="user-list" id="userList">
-                <!-- Ulanyjylaryň sanawy dinamiki goşular -->
-            </div>
-        </div>
+<header>
+  <div class="logo">SecureVPN</div>
+  <nav>
+    <ul id="navList">
+      <li><a href="#features">Особенности</a></li>
+      <li><a href="#vpn">VPN</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Контакт</a></li>
+    </ul>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  </nav>
+</header>
 
-        <div class="form-group">
-            <label for="serverSelect">Serwer saýlaň:</label>
-            <select id="serverSelect">
-                <option value="">Serwer saýlaň...</option>
-                <option value="singapore">🇸🇬 Singapur</option>
-                <option value="germany">🇩🇪 Germaniýa</option>
-                <option value="usa">🇺🇸 Amerika</option>
-                <option value="brazil">🇧🇷 Braziliýa</option>
-            </select>
-        </div>
+<section class="hero animate-on-scroll">
+  <h1>Быстрые и безопасные VPN подключения</h1>
+  <p>Доступ к заблокированным ресурсам через протоколы VLESS, ShadowSocks и другие.</p>
+  <a href="#vpn" class="btn">Начать использовать</a>
+</section>
 
-        <button class="generate-btn" onclick="generateKey()">
-            🚀 VLESS açar al
-        </button>
-
-        <div class="result-container" id="resultContainer">
-            <h3>✅ Siziň VLESS açaryňyz taýýar!</h3>
-            <div class="key-display" id="keyDisplay"></div>
-            <button class="copy-btn" id="copyBtn" onclick="copyKey()">📋 Açary göçür</button>
-            
-            <div class="info-box">
-                <strong>Görkezme:</strong><br>
-                Açary göçüriň we öz VLESS müşderije programmaňyza goşuň (V2rayN, Shadowrocket we ş.m.)
-            </div>
-        </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number" id="totalKeys">0</div>
-                <div class="stat-label">Berlen açarlar</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="activeUsers">0</div>
-                <div class="stat-label">Işjeň ulanyjylar</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">4</div>
-                <div class="stat-label">Serwerler</div>
-            </div>
-        </div>
+<section class="features" id="features">
+  <h2>Наши преимущества</h2>
+  <div class="feature-grid">
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Анонимность</div>
+      <div class="feature-desc">Все соединения шифруются и не сохраняют логи.</div>
     </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Высокая скорость</div>
+      <div class="feature-desc">Серверы по всему миру для оптимальной производительности.</div>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Глобальная сеть</div>
+      <div class="feature-desc">Поддержка серверов в Европе, Азии и США.</div>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Мобильная совместимость</div>
+      <div class="feature-desc">Работает на Android, iOS, Windows и Linux.</div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Ulanyjylaryň sanawy
-        const users = [
-            { id: 'user1', name: 'Ahmed', email: 'ahmed@example.com' },
-            { id: 'user2', name: 'Sylap', email: 'sylap@example.com' },
-            { id: 'user3', name: 'Aman aga', email: 'aman@example.com' },
-            { id: 'user4', name: 'Meryem', email: 'meryem@example.com' },
-            { id: 'user5', name: 'Nuseybe', email: 'nuseybe@example.com' },
-            { id: 'user6', name: 'Bayram dayy', email: 'bayram@example.com' },
-            { id: 'user7', name: 'Türkişmyrat', email: 'turkishmyrat@example.com' }
-        ];
+<section class="vpn-section" id="vpn">
+  <h2 style="text-align:center;margin-bottom:2rem;">VPN Конфигурации</h2>
+  <div class="tab-nav">
+    <button data-tab="vless" class="active">VLESS</button>
+    <button data-tab="ss">ShadowSocks</button>
+  </div>
+  <div class="tab-content" id="tabContent">
+    <!-- VLESS -->
+    <div class="link-item" data-type="vless">
+      <span>vless://d28ac25e-cd19-4399-8887-a9329bb5a2bd@wiki.shadylivvi.top:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.foxsports.com&fp=chrome&security=reality&pbk=E_7qLxpo_hBpGhZ4OQNt_gohsaZibDUoJeJB5S0TIBY&sid=bb23da99b860#Амстердам Нидерланды 🇳🇱</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <div class="link-item" data-type="vless">
+      <span>vless://a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8@amsterdam.vpnreality.net:443/?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&sni=cloudflare.com&fp=firefox&pbk=abcDEF1234567890XYZ&sid=1a2b3c4d5e6f7890#Амстердам Нидерланды 🇳🇱</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <div class="link-item" data-type="vless">
+      <span>vless://e5a6f7b8-2d1c-4a9f-b0e1-f2d3c4e5a6b7@rotterdam.securevpn.nl:443/?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&sni=google.com&fp=safari&pbk=ZYX9876543210WVU&sid=cdef1234567890ab#Роттердам Нидерланды 🇳🇱</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <div class="link-item" data-type="vless">
+      <span>vless://f3d4e5a6-7c8b-9d0e-1f2a-3b4c5d6e7f8a@utrecht.fastvless.eu:443/?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&sni=youtube.com&fp=chrome&pbk=WXY5432109876543&sid=abcdefg123456789#Утрехт Нидерланды 🇳🇱</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <!-- ShadowSocks -->
+    <div class="link-item" data-type="ss" style="display:none;">
+      <span>ss://YWVzLTI1Ni1nY206YWJjMTIzQDEyNy4wLjAuMSA4880/#%D0%9B%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <div class="link-item" data-type="ss" style="display:none;">
+      <span>ss://cmM0LW1kNTpwYXNzd29yZEAxMC4xMC4xMC4xOi54443/#%D0%A1%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%E2%9C%85%EF%B8%8F</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+    <div class="link-item" data-type="ss" style="display:none;">
+      <span>ss://YWVzLTI1Ni1jdHI6dXNlcjEyM0AxOTAuMTEyLjEwLjE6NDQ3/#%D0%90%D0%BC%D1%81%D1%82%D0%B5%D1%80%D0%B4%D0%B0%D0%BC%20%D0%9D%D0%B8%D0%B4%D0%B5%D1%80%D0%BB%D0%B0%D0%BD%D0%B4%D1%8B%20%F0%9F%87%B1%F0%9F%87%BA</span>
+      <button class="copy-btn" onclick="copyLink(this)">Копировать</button>
+    </div>
+  </div>
+</section>
 
-        // Реальные VLESS ключи для каждого сервера
-        const vlessKeys = {
-            'singapore': 'vless://828528e9-3340-4ead-931f-ae190688479f@pop3.freshibeth.click:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=lmaauctions.com&fp=chrome&security=reality&pbk=JeMFHPPOEgZ2KNNdTQE4Ohldh8f1f_tTUNIbWBliWRA&sid=6f038ec9294b#%D0%A1%D0%B8%D0%BD%D0%B3%D0%B0%D0%BF%D1%83%D1%80%F0%9F%8C%86',
-            'germany': 'vless://dd8776f8-05d3-49ba-937f-6941018d9cbd@crm.lefturania.org:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.hollywoodreporter.com&fp=chrome&security=reality&pbk=YtOMJsaboCyEerw4TGr6i-Kz4h6H7zTSWR09CWDdm3E&sid=d9da41d2b043#%D0%93%D0%B5%D1%80%D0%BC%D0%B0%D0%BD%D0%B8%D1%8F%20',
-            'usa': 'vless://9b292f58-925a-4f65-888c-1d58781c79ba@my.bogusfateha.click:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.foxsports.com&fp=chrome&security=reality&pbk=z0Lx8TRdcjOQl310ffO6ZqioOrdrQt5bzzy1ip0IiEc&sid=0a5bbb1f48d5#%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%20',
-            'brazil': 'vless://76203da1-ebcd-4ee6-9caa-8659cf63fd07@exchange.illgolu.cyou:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=www.hollywoodreporter.com&fp=chrome&security=reality&pbk=UT_JhM6opZFVAwqLs9wQ4mXhMAFEPVEUVoYMzJV8lys&sid=689c60c93a85#%D0%91%D1%80%D0%B0%D0%B7%D0%B8%D0%BB%D0%B8%D1%8F%20'
-        };
+<section class="features" id="faq">
+  <h2 style="text-align:center;">Часто задаваемые вопросы</h2>
+  <div class="feature-grid">
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-title">Как использовать?</div>
+      <div class="feature-desc">Скопируйте ссылку и откройте её в приложении V2Ray или Clash.</div>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-title">Есть ли ограничения?</div>
+      <div class="feature-desc">Тестовые конфигурации могут иметь ограничения по времени использования.</div>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-title">Платное использование?</div>
+      <div class="feature-desc">Для коммерческого использования требуется подписка.</div>
+    </div>
+    <div class="feature-card animate-on-scroll">
+      <div class="feature-title">Поддерживаемые платформы</div>
+      <div class="feature-desc">Android, iOS, Windows, Linux, macOS.</div>
+    </div>
+  </div>
+</section>
 
-        let selectedUserId = null;
-        let keyCount = parseInt(localStorage.getItem('keyCount')) || 0;
-        let activeUsers = new Set(JSON.parse(localStorage.getItem('activeUsers') || '[]'));
+<section class="features" id="contact">
+  <h2 style="text-align:center;">Связь с нами</h2>
+  <div style="max-width:600px;margin:2rem auto;text-align:center;">
+    <p>По вопросам сотрудничества и технической поддержки:</p>
+    <p>Email: support@securevpn.test</p>
+    <p>Telegram: @SecureVPN_Support</p>
+  </div>
+</section>
 
-        // Инициализация
-        function init() {
-            renderUserList();
-            updateStats();
-        }
+<footer>
+  &copy; 2025 SecureVPN. Все права защищены.
+</footer>
 
-        // Отображение списка пользователей
-        function renderUserList() {
-            const userList = document.getElementById('userList');
-            userList.innerHTML = '';
-            
-            users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.className = 'user-item';
-                userItem.innerHTML = `
-                    <div><strong>${user.name}</strong></div>
-                    <div style="font-size: 0.9em; color: #666;">${user.email}</div>
-                `;
-                userItem.onclick = () => selectUser(user.id, userItem);
-                userList.appendChild(userItem);
-            });
-        }
+<button id="scrollTopBtn" title="Вверх">&#8593;</button>
 
-        // Выбор пользователя
-        function selectUser(userId, element) {
-            // Убираем выделение с предыдущего элемента
-            document.querySelectorAll('.user-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            // Выделяем текущий элемент
-            element.classList.add('selected');
-            selectedUserId = userId;
-        }
+<script>
+  // Smooth Scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop - 60,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
 
-        // VLESS açar döretmek
-        function generateKey() {
-            if (!selectedUserId) {
-                alert('Sanawda ulanyjy saýlaň');
-                return;
-            }
+  // Tabs
+  const tabs = document.querySelectorAll('.tab-nav button');
+  const tabContent = document.getElementById('tabContent');
 
-            const serverSelect = document.getElementById('serverSelect');
-            if (!serverSelect.value) {
-                alert('Serwer saýlaň');
-                return;
-            }
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const type = tab.getAttribute('data-tab');
 
-            const selectedUser = users.find(u => u.id === selectedUserId);
-            const vlessKey = vlessKeys[serverSelect.value];
-            
-            // Netijäni görkezmek
-            document.getElementById('keyDisplay').textContent = vlessKey;
-            document.getElementById('resultContainer').classList.add('show');
-            
-            // Statistikany täzelemek
-            keyCount++;
-            activeUsers.add(selectedUserId);
-            localStorage.setItem('keyCount', keyCount.toString());
-            localStorage.setItem('activeUsers', JSON.stringify([...activeUsers]));
-            updateStats();
-            
-            // Netijä skrol etmek
-            document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
-        }
+      Array.from(tabContent.children).forEach(item => {
+        item.style.display = item.getAttribute('data-type') === type ? 'flex' : 'none';
+      });
+    });
+  });
 
-        // Açary göçürmek
-        function copyKey() {
-            const keyDisplay = document.getElementById('keyDisplay');
-            navigator.clipboard.writeText(keyDisplay.textContent).then(() => {
-                const copyBtn = document.getElementById('copyBtn');
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = '✅ Göçürildi!';
-                copyBtn.classList.add('copied');
-                
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                    copyBtn.classList.remove('copied');
-                }, 2000);
-            }).catch(() => {
-                // Köne brauzerleri üçin ätiýaçlyk
-                const textArea = document.createElement('textarea');
-                textArea.value = keyDisplay.textContent;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                alert('Açar göçürildi!');
-            });
-        }
+  // Copy Link
+  function copyLink(button) {
+    const parent = button.closest('.link-item');
+    const link = parent.querySelector('span').innerText;
 
-        // Обновление статистики
-        function updateStats() {
-            document.getElementById('totalKeys').textContent = keyCount;
-            document.getElementById('activeUsers').textContent = activeUsers.size;
-        }
+    navigator.clipboard.writeText(link).then(() => {
+      button.textContent = 'Скопировано!';
+      setTimeout(() => {
+        button.textContent = 'Копировать';
+      }, 2000);
+    }).catch(err => {
+      alert('Ошибка копирования: ' + err);
+    });
+  }
 
-        // Инициализация при загрузке страницы
-        init();
-    </script>
+  // Mobile Menu Toggle
+  function toggleMenu() {
+    const navList = document.getElementById('navList');
+    navList.classList.toggle('active');
+  }
+
+  // Scroll to Top
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
+  window.addEventListener("scroll", () => {
+    scrollTopBtn.classList.toggle("show", window.scrollY > 300);
+  });
+
+  scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Animation on Scroll
+  const animateOnScrollElements = document.querySelectorAll(".animate-on-scroll");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  }, { threshold: 0.1 });
+
+  animateOnScrollElements.forEach(el => observer.observe(el));
+</script>
+
 </body>
 </html>
+```
