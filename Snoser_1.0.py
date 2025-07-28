@@ -17,7 +17,7 @@ import threading
 init(autoreset=True)  # colorama init
 
 a = input("Введи текстовый пароль для запуска программы:")
-if a != "IT-Spidey":
+if a != "Ahmedifb2":
     print(colored(f"Пароль не верен! Завершаю работу программы! ", 'red'))
     print(colored(f"Уточни его у создателей", 'red'))
     exit()
@@ -29,7 +29,7 @@ ascii_banner = pyfiglet.figlet_format("Jroyyer")
 colored_banner = colored(ascii_banner, color='magenta')  # Красим в цвет
 print(colored_banner)
 
-print(Fore.GREEN + "Цена: 300₽")
+print(Fore.GREEN + " ")
 senders = {
     'raumonatuhadi@mail.ru': 'a7r6U9J6KHDaguAsidDH',
     'floworadpewoodvi@mail.ru': 'ZcyUg5MUq8jMr9i8aST1',
